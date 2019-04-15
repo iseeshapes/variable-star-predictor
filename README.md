@@ -34,3 +34,7 @@ the binary star data in the JSON format below.
 * To run the web server use:
 
     node server.js
+
+* The site will be at:
+
+    http://localhost:3000/
