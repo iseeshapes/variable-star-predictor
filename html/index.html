@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>Binary Star Eclipse Predictor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="/js/cookies.js"></script>
+    <script src="/js/site.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/table.css">
+  </head>
+  <body>
+    <h1>Binary Star Eclipse Predictor</h1>
+    <table>
+      <tr>
+        <td class="inputLabel">Latitude (-90 -> 90):</td>
+        <td><input id="latitude" type="text"></td>
+      </tr>
+      <tr>
+        <td class="inputLabel">Longitude (0 -> 359):</td>
+        <td><input id="longitude" type="text"></td>
+      </tr>
+      <tr>
+        <td class="inputLabel">Minimum Altitude (0 -> 90):</td>
+        <td><input id="miniumAltitude" type="text"></td>
+      </tr>
+      <tr>
+        <td class="inputLabel">Maximum Magnitude:</td>
+        <td><input id="maximumMagnitude" type="text"></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <button type="button" name="button" onclick="calculate()">Search</button>
+        </td>
+      </tr>
+    </table>
+    <p />
+    <div id="results">
+      <h2>Results</h2>
+      <table>
+        <tr>
+          <td>Sort</td>
+          <td>
+            <select id="sort" onchange="updateTable()">
+              <option value="time">Mid Eclipse Time</option>
+              <option value="name">GCVS Name</option>
+              <option value="type">GCVS Type</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="inputLabel">Type includes text:</td>
+          <td><input id="variableType" type="text" oninput="updateTable()"></td>
+        </tr>
+        <tr>
+          <td class="inputLabel">Exclude stars without start and ends times:</td>
+          <td><input id="excludeNoStart" type="checkbox" onchange="updateTable()"></td>
+        </tr>
+      </table>
+      <table id="dataTable" class="data">
+          <tr class="heading">
+            <th class="data" colspan="2">GCVS</th>
+            <th class="data" rowspan="2">Maximum<br/>Magnitude</th>
+            <th class="data" rowspan="2">Minimum<br/>Magnitude</th>
+            <th class="data" colspan="2">Start Eclipse</th>
+            <th class="data" colspan="2">Mid Eclipse</th>
+            <th class="data" colspan="2">End Eclipse</th>
+          </tr>
+          <tr class="heading">
+            <th class="data">Name</th>
+            <th class="data">Type</th>
+            <th class="data">Time</th>
+            <th class="data">Alt</th>
+            <th class="data">Time</th>
+            <th class="data">Alt</th>
+            <th class="data">Time</th>
+            <th class="data">Alt</th>
+          </tr>
+      </table>
+    </div>
+
+  </body>
+  <script type="text/javascript">
+
+    $(function () {
+      $("#longitude").val(getCookie("longitude"));
+      $("#latitude").val(getCookie("latitude"));
+      $("#miniumAltitude").val(getCookie("miniumAltitude"));
+      $("#maximumMagnitude").val(getCookie("maximumMagnitude"));
+
+      calculate ();
+    });
+
+  </script>
+</html>

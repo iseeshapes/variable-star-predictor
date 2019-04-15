@@ -1,0 +1,19 @@
+table.data {
+  border-collapse: collapse;
+}
+
+tr.data, th.data, td.data {
+  border: 1px solid black;
+}
+
+td.data {
+  font-family: "Lucida Console", monospace;
+}
+
+td.number {
+  text-align: right;
+}
+
+td.time, td.blank {
+  text-align: center;
+}
