@@ -1,8 +1,8 @@
 * Install NodeJS from https://nodejs.org/
 
-* Install Express Using "npm":
+* Install Components Using "npm":
 
-    npm install express
+    npm install
 
 * In the data folder there must be a file called binaryStarData.json that contains
 the binary star data in the JSON format below.
@@ -38,3 +38,18 @@ the binary star data in the JSON format below.
 * The site will be at:
 
     http://localhost:3000/
+
+# License
+
+BinaryStarEclipsePredictor is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+BinaryStarEclipsePredictor is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with BinaryStarEclipsePredictor.  If not, see <https://www.gnu.org/licenses/>.
