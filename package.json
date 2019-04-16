@@ -1,0 +1,24 @@
+{
+  "name": "binarystareclipsepredictor",
+  "version": "1.0.0",
+  "description": "* Install NodeJS from https://nodejs.org/",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iseeshapes/BinaryStarEclipsePredictor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iseeshapes/BinaryStarEclipsePredictor/issues"
+  },
+  "homepage": "https://github.com/iseeshapes/BinaryStarEclipsePredictor#readme"
+}
