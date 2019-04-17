@@ -56,7 +56,7 @@ function createTimeAndPosition (time, binaryStar, longitude, latitude) {
   }
 }
 
-app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumAltitude/maximumMagnitude/:maximumMagnitude", (request, response) => {
+app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumAltitude/maximumMagnitude/:maximumMagnitude/startDate/:startDate/endDate/:endDate", (request, response) => {
   if (request.params.longitude == null || request.params.longitude == undefined) {
     response.status(500).json({ message : "No 'longitude' parameter defined in query string" });
     return;
@@ -77,18 +77,32 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
     return;
   }
 
+  if (request.params.startDate == null || request.params.startDate == undefined) {
+    response.status(500).json({ message : "No 'startDate' parameter defined in query string" });
+    return;
+  }
+
+  if (request.params.endDate == null || request.params.endDate == undefined) {
+    response.status(500).json({ message : "No 'endDate' parameter defined in query string" });
+    return;
+  }
+
   var longitude = toRadians(request.params.longitude);
   var latitude = toRadians(request.params.latitude);
   var miniumAltitude = request.params.miniumAltitude;
   var maximumMagnitude = request.params.maximumMagnitude;
+  var startDate = new Date(request.params.startDate);
+  var endDate = new Date(request.params.endDate);
+
+  var startJulianDate = julianDate.getJulianDate(startDate);
+  var endJulianDate = julianDate.getJulianDate(endDate);
+
+  console.log("Start: " + startDate + ", End: " + endDate);
 
   var rawData = fs.readFileSync ('data/binaryStarData.json');
   var binaryStars = JSON.parse(rawData);
 
   var results = [];
-
-  var startTime = julianDate.getStartJulianDate();
-  var endTime = julianDate.getEndJulianDate();
 
   var midEclipseTime, startEclipseTime, endEclipseTime;
   var midEclipse, startEclipse, endEclipse;
@@ -100,7 +114,7 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
     }
 
     midEclipseTime = binaryStars[i].epoch;
-    while (midEclipseTime < startTime) {
+    while (midEclipseTime < startJulianDate) {
       midEclipseTime += binaryStars[i].period;
     }
 
@@ -108,7 +122,7 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
       startEclipseTime = midEclipseTime - binaryStars[i].eclipseTime / 2;
       endEclipseTime = midEclipseTime + binaryStars[i].eclipseTime / 2;
 
-      if (startEclipseTime < startTime  || endEclipseTime > endTime) {
+      if (startEclipseTime < startJulianDate || endEclipseTime > endJulianDate) {
         continue;
       }
 
@@ -122,7 +136,7 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
         continue;
       }
     } else {
-      if (midEclipseTime < startTime  || midEclipseTime > endTime) {
+      if (midEclipseTime < startJulianDate || midEclipseTime > endJulianDate) {
         continue;
       }
 
@@ -148,4 +162,4 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
   response.status(200).json(results);
 });
 
-app.listen(port, () => console.log("listening on port ${port}!"));
+app.listen(port);

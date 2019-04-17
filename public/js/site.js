@@ -18,6 +18,28 @@ along with BinaryStarEclipsePredictor.  If not, see <https://www.gnu.org/license
 
 var tableData = [];
 
+function getPeriod (startHour, endHour) {
+  var dayInMilliseconds = 24 * 60 * 60 * 1000;
+  var period = {};
+
+  period.startDate = new Date();
+  period.startDate.setHours(startHour);
+  period.startDate.setMinutes(0);
+  period.startDate.setSeconds(0);
+  period.startDate.setMilliseconds(0);
+
+  period.endDate = new Date();
+  period.endDate.setHours(endHour);
+  period.endDate.setMinutes(0);
+  period.endDate.setSeconds(0);
+  period.endDate.setMilliseconds(0);
+  if (endHour < startHour) {
+    period.endDate.setTime(period.endDate.getTime() + dayInMilliseconds);
+  }
+
+  return period;
+}
+
 function formatTime (date) {
   var hour = date.getHours();
   var minute = date.getMinutes();
@@ -102,6 +124,8 @@ function calculate () {
   var latitude = $("#latitude").val();
   var miniumAltitude = $("#miniumAltitude").val();
   var maximumMagnitude = $("#maximumMagnitude").val();
+  var startHour = $("#startHour").val();
+  var endHour = $("#endHour").val();
 
   if (longitude !== "") {
     setCookie("longitude", longitude, 60);
@@ -127,10 +151,26 @@ function calculate () {
     maximumMagnitude = 18;
   }
 
+  if (startHour != undefined && startHour !== "") {
+    setCookie("startHour", startHour, 60);
+  } else {
+    startHour = 19;
+  }
+
+  if (endHour != undefined && endHour !== "") {
+    setCookie("endHour", endHour, 60);
+  } else {
+    endHour = 4;
+  }
+
+  var period = getPeriod (Number(startHour), Number(endHour));
+
   var query = "/search/longitude/" + longitude
     + "/latitude/" + latitude
     + "/miniumAltitude/" + miniumAltitude
-    + "/maximumMagnitude/" + maximumMagnitude;
+    + "/maximumMagnitude/" + maximumMagnitude
+    + "/startDate/" + period.startDate
+    + "/endDate/" + period.endDate;
 
   $.getJSON (query, function (_data) {
     tableData = _data;

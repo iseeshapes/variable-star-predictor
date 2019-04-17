@@ -5,7 +5,6 @@
     <script src="/js/cookies.js"></script>
     <script src="/js/site.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/site.css">
-    <link rel="stylesheet" type="text/css" href="/css/table.css">
   </head>
   <body>
     <div id="titleWrapper">
@@ -42,10 +41,10 @@
       <div class="bodyHeading">Visible Binary Stars</div>
       <table class="inputTable">
         <tr>
-          <td class="inputLabel">Sort</td>
+          <td class="inputLabel">Sort:</td>
           <td>
-            <select id="sort" onchange="updateTable()">
-              <option value="time">Mid Eclipse Time</option>
+            <select id="sort" class="textInput" onchange="updateTable()">
+              <option value="time" selected="true">Mid Eclipse Time</option>
               <option value="name">GCVS Name</option>
               <option value="type">GCVS Type</option>
             </select>
@@ -53,7 +52,7 @@
         </tr>
         <tr>
           <td class="inputLabel">Type includes text:</td>
-          <td><input id="variableType" type="text" oninput="updateTable()"></td>
+          <td><input id="variableType" class="textInput" type="text" oninput="updateTable()"></td>
         </tr>
         <tr>
           <td class="inputLabel">Exclude stars without start and ends times:</td>
@@ -89,6 +88,8 @@
       $("#latitude").val(getCookie("latitude"));
       $("#miniumAltitude").val(getCookie("miniumAltitude"));
       $("#maximumMagnitude").val(getCookie("maximumMagnitude"));
+      $("#startHour").val(getCookie("startHour"));
+      $("#endHour").val(getCookie("endHour"));
 
       calculate ();
     });
