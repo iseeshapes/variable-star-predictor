@@ -1,42 +1,48 @@
 <html>
   <head>
-    <title>Binary Star Eclipse Predictor</title>
+    <title>Ecipsing Binary Star Observation Planner</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="/js/cookies.js"></script>
     <script src="/js/site.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/site.css">
     <link rel="stylesheet" type="text/css" href="/css/table.css">
   </head>
   <body>
-    <h1>Binary Star Eclipse Predictor</h1>
-    <table>
-      <tr>
-        <td class="inputLabel">Latitude (-90 -> 90):</td>
-        <td><input id="latitude" type="text"></td>
-      </tr>
-      <tr>
-        <td class="inputLabel">Longitude (0 -> 359):</td>
-        <td><input id="longitude" type="text"></td>
-      </tr>
-      <tr>
-        <td class="inputLabel">Minimum Altitude (0 -> 90):</td>
-        <td><input id="miniumAltitude" type="text"></td>
-      </tr>
-      <tr>
-        <td class="inputLabel">Maximum Magnitude:</td>
-        <td><input id="maximumMagnitude" type="text"></td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <button type="button" name="button" onclick="calculate()">Search</button>
-        </td>
-      </tr>
-    </table>
-    <p />
-    <div id="results">
-      <h2>Results</h2>
-      <table>
+    <div id="titleWrapper">
+      <div id="titleText">Eclipsing Binary Star Observation Planner</div>
+      <img id="titleImage" src="/image/eso1540a.jpg"></img>
+    </div>
+    <div class="body">
+      <div class="bodyHeading">Observation Site Details</div>
+      <table class="inputTable">
         <tr>
-          <td>Sort</td>
+          <td class="inputLabel">Latitude (-90 -> 90):</td>
+          <td><input id="latitude" type="text" class="numberInput"></td>
+          <td class="inputLabel">Minimum Altitude (0 -> 90):</td>
+          <td><input id="miniumAltitude" type="text" class="numberInput"></td>
+        </tr>
+        <tr>
+          <td class="inputLabel">Longitude (0 -> 359):</td>
+          <td><input id="longitude" type="text" class="numberInput"></td>
+          <td class="inputLabel">Maximum Magnitude:</td>
+          <td><input id="maximumMagnitude" type="text" class="numberInput"></td>
+        </tr>
+        <tr>
+          <td class="inputLabel">Start Hour</td>
+          <td><input id="startHour" type="text" class="numberInput"></td>
+          <td class="inputLabel">End Hour</td>
+          <td><input id="endHour" type="text" class="numberInput"></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="buttonCell">
+            <button class="button" type="button" onclick="calculate()">Search</button>
+          </td>
+        </tr>
+      </table>
+      <div class="bodyHeading">Visible Binary Stars</div>
+      <table class="inputTable">
+        <tr>
+          <td class="inputLabel">Sort</td>
           <td>
             <select id="sort" onchange="updateTable()">
               <option value="time">Mid Eclipse Time</option>
@@ -57,25 +63,24 @@
       <table id="dataTable" class="data">
           <tr class="heading">
             <th class="data" colspan="2">GCVS</th>
-            <th class="data" rowspan="2">Maximum<br/>Magnitude</th>
-            <th class="data" rowspan="2">Minimum<br/>Magnitude</th>
+            <th class="data magnitude" rowspan="2">Maximum<br/>Magnitude</th>
+            <th class="data magnitude" rowspan="2">Minimum<br/>Magnitude</th>
             <th class="data" colspan="2">Start Eclipse</th>
             <th class="data" colspan="2">Mid Eclipse</th>
             <th class="data" colspan="2">End Eclipse</th>
           </tr>
           <tr class="heading">
-            <th class="data">Name</th>
-            <th class="data">Type</th>
-            <th class="data">Time</th>
-            <th class="data">Alt</th>
-            <th class="data">Time</th>
-            <th class="data">Alt</th>
-            <th class="data">Time</th>
-            <th class="data">Alt</th>
+            <th class="data name">Name</th>
+            <th class="data type">Type</th>
+            <th class="data time">Time</th>
+            <th class="data altitude">Alt</th>
+            <th class="data time">Time</th>
+            <th class="data altitude">Alt</th>
+            <th class="data time">Time</th>
+            <th class="data altitude">Alt</th>
           </tr>
       </table>
     </div>
-
   </body>
   <script type="text/javascript">
 
