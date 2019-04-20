@@ -39,7 +39,8 @@ div.body {
   left: var(--body-left);
   top: var(--body-top);
   background-color: #fcfcff;
-  border: 2px solid #cdeaff
+  border: 2px solid #cdeaff;
+  margin-bottom: 30px;
 }
 
 .bodyHeading {
@@ -56,6 +57,10 @@ div.body {
 
 .inputLabel {
   font-size: 14;
+}
+
+.error {
+  background-color: #ff0000;
 }
 
 .numberInput {
@@ -110,8 +115,15 @@ tr.data:hover {
   background-color: #f0f0ff;
 }
 
-tr.data, th.data, td.data {
+tr.data, th.data, td.data, td.no-results {
   border: 1px solid black;
+}
+
+td.no-results {
+  font-family: "Lucida Console", monospace;
+  font-size: 24px;
+  padding: 10px 10px 10px 10px;
+  text-align: center;
 }
 
 td.data {
@@ -126,4 +138,11 @@ td.number {
 
 td.time, td.blank {
   text-align: center;
+}
+
+#summary {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative;
+  left: var(--item-left);
 }

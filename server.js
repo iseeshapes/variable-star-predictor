@@ -97,8 +97,6 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
   var startJulianDate = julianDate.getJulianDate(startDate);
   var endJulianDate = julianDate.getJulianDate(endDate);
 
-  console.log("Start: " + startDate + ", End: " + endDate);
-
   var rawData = fs.readFileSync ('data/binaryStarData.json');
   var binaryStars = JSON.parse(rawData);
 

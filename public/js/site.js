@@ -70,6 +70,7 @@ function fillInEclipsePoint (eclipsePoint) {
 }
 
 function updateTable () {
+  var starNamePattern = /^([A-Z]{1,2}|[a-z.]{1,3}\s+\d?|V\d{4})*\s+([A-Za-z]{3}).*$/;
   $("table.data tr.data").remove();
 
   var sort = $("#sort").val();
@@ -87,7 +88,23 @@ function updateTable () {
     });
   } else if ("name".localeCompare(sort) == 0) {
     tableData.sort((lhs, rhs) => {
-      return lhs.name.localeCompare(rhs.name);
+      var lhsMatch = lhs.name.match(starNamePattern);
+      var rhsMatch = rhs.name.match(starNamePattern);
+
+      if (rhsMatch == null && rhsMatch == null) {
+        return 0;
+      } else if (lhsMatch == null) {
+        return 1;
+      } else if (rhsMatch == null) {
+        return -1;
+      }
+
+      var result = lhsMatch[2].localeCompare(rhsMatch[2]);
+      if (result !== 0) {
+        return result;
+      }
+
+      return lhsMatch[1].localeCompare(rhsMatch[1]);
     });
   } else if ("type".localeCompare(sort) == 0) {
     tableData.sort((lhs, rhs) => {
@@ -97,6 +114,7 @@ function updateTable () {
 
   var excludeNoStart = $("#excludeNoStart").is(":checked");
   var variableType = $("#variableType").val().toUpperCase();
+  var starCount = 0;
   for (var i=0;i<tableData.length;i++) {
     if (excludeNoStart && tableData[i].startEclipse === null) {
       continue;
@@ -104,6 +122,8 @@ function updateTable () {
     if (variableType.length > 0 && tableData[i].type.indexOf(variableType) == -1) {
       continue;
     }
+
+    starCount++;
 
     var html = '<tr class="data"><td class="data">' + tableData[i].name + '</td>'
       + '<td class="data">' + tableData[i].type + '</td>'
@@ -117,53 +137,34 @@ function updateTable () {
     //console.log (html);
     $("#dataTable > tbody:last-child").append(html);
   }
+
+  if (starCount === 0) {
+    $("#dataTable > tbody:last-child")
+      .append('<tr class="data"><td colspan="10" class="no-results">No Stars</td></tr>');
+    $("#summary").html("Try expanding search or loosening filters");
+  } else if (starCount == tableData.length) {
+    $("#summary").html(tableData.length + " stars found");
+  } else {
+    $("#summary").html("Filtered " + starCount + " from " + tableData.length + " stars found");
+  }
 }
 
 function calculate () {
-  var longitude = $("#longitude").val();
-  var latitude = $("#latitude").val();
-  var miniumAltitude = $("#miniumAltitude").val();
-  var maximumMagnitude = $("#maximumMagnitude").val();
-  var startHour = $("#startHour").val();
-  var endHour = $("#endHour").val();
+  var error = false;
 
-  if (longitude !== "") {
-    setCookie("longitude", longitude, 60);
-  } else {
+  var longitude = getLongitude();
+  var latitude = getLatitude();
+  var miniumAltitude = getMiniumAltitude();
+  var maximumMagnitude = getMaximumMagnitude();
+  var startHour = getStarHour();
+  var endHour = getEndHour();
+
+  if (isNaN(longitude) || isNaN(latitude) || isNaN(miniumAltitude)
+        || isNaN(maximumMagnitude) || isNaN(startHour) || isNaN(endHour)) {
     return;
   }
 
-  if (latitude !== "") {
-    setCookie("latitude", latitude, 60);
-  } else {
-    return;
-  }
-
-  if (miniumAltitude !== "") {
-    setCookie("miniumAltitude", miniumAltitude, 60);
-  } else {
-    miniumAltitude = 30;
-  }
-
-  if (maximumMagnitude !== "") {
-    setCookie("maximumMagnitude", maximumMagnitude, 60);
-  } else {
-    maximumMagnitude = 18;
-  }
-
-  if (startHour != undefined && startHour !== "") {
-    setCookie("startHour", startHour, 60);
-  } else {
-    startHour = 19;
-  }
-
-  if (endHour != undefined && endHour !== "") {
-    setCookie("endHour", endHour, 60);
-  } else {
-    endHour = 4;
-  }
-
-  var period = getPeriod (Number(startHour), Number(endHour));
+  var period = getPeriod (startHour, endHour);
 
   var query = "/search/longitude/" + longitude
     + "/latitude/" + latitude
@@ -175,5 +176,14 @@ function calculate () {
   $.getJSON (query, function (_data) {
     tableData = _data;
     updateTable ();
+
+    if (tableData.length > 0) {
+      setCookie ("longitude", longitude);
+      setCookie ("latitude", latitude);
+      setCookie ("miniumAltitude", miniumAltitude);
+      setCookie ("maximumMagnitude", maximumMagnitude);
+      setCookie ("startHour", startHour);
+      setCookie ("endHour", endHour);
+    }
   });
 }
