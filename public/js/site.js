@@ -69,6 +69,23 @@ function fillInEclipsePoint (eclipsePoint) {
     + '<td class="data number">' + eclipsePoint.altitude.toFixed(0) + '</td>';
 }
 
+function fillInSources (names) {
+  var url = "http://www.sai.msu.su/gcvs/cgi-bin/search.cgi?search=" + names.GCVS;
+  url = url.replace(" ", "+");
+
+  var sources = '<td class="data">';
+  sources += '<a href="' + url + '" target="_blank">GCVS</a>';
+  if (typeof names.Krakow !== 'undefined') {
+    url = "http://www.as.up.krakow.pl/minicalc/" + names.Krakow + ".HTM"
+    url = url.replace (" ", "");
+
+    sources += ', <a href="' + url + '" target="_blank">TIDAK</a>';
+  }
+  sources += "</td>";
+
+  return sources
+}
+
 function updateTable () {
   var starNamePattern = /^([A-Z]{1,2}|[a-z.]{1,3}\s+\d?|V\d{4})*\s+([A-Za-z]{3}).*$/;
   $("table.data tr.data").remove();
@@ -114,6 +131,7 @@ function updateTable () {
 
   var excludeNoStart = $("#excludeNoStart").is(":checked");
   var variableType = $("#variableType").val().toUpperCase();
+  var sources;
   var starCount = 0;
   for (var i=0;i<tableData.length;i++) {
     if (excludeNoStart && tableData[i].startEclipse === null) {
@@ -125,7 +143,7 @@ function updateTable () {
 
     starCount++;
 
-    var html = '<tr class="data"><td class="data">' + tableData[i].name + '</td>'
+    var html = '<tr class="data"><td class="data">' + tableData[i].names.GCVS + '</td>'
       + '<td class="data">' + tableData[i].type + '</td>'
       + '<td class="data number">' + tableData[i].maximumMagnitude.toFixed(2) + '</td>'
       + '<td class="data number">' + tableData[i].minimumMagnitude.toFixed(2) + '</td>';
@@ -133,6 +151,8 @@ function updateTable () {
     html += fillInEclipsePoint(tableData[i].startEclipse);
     html += fillInEclipsePoint(tableData[i].midEclipse);
     html += fillInEclipsePoint(tableData[i].endEclipse);
+    html += '<td class="data">' + tableData[i].spectralType + '</td>';
+    html += fillInSources (tableData[i].names);
     html += '</tr>';
     //console.log (html);
     $("#dataTable > tbody:last-child").append(html);

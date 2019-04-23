@@ -1,5 +1,5 @@
 :root {
-  --body-width: 870px;
+  --body-width: 1050px;
   --body-left: 30px;
   --body-top: 10px;
   --item-left: 20px;
@@ -91,7 +91,7 @@ th.name, th.type {
   width: 120px;
 }
 
-th.name, th.type, th.magnitude {
+th.name, th.type, th.magnitude, th.spectralType, th.links {
   width: 100px;
 }
 

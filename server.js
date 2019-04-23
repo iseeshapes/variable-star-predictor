@@ -147,13 +147,14 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
     }
 
     results.push({
-      name: binaryStars[i].name,
+      names: binaryStars[i].names,
       type: binaryStars[i].type,
       minimumMagnitude: binaryStars[i].minimumMagnitude,
       maximumMagnitude: binaryStars[i].maximumMagnitude,
       startEclipse: startEclipse,
       midEclipse: midEclipse,
       endEclipse: endEclipse,
+      spectralType: binaryStars[i].spectralType,
     });
   }
 
