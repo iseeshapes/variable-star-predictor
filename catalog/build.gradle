@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 1.8
+
+ext {
+    slf4j = '1.7.25'
+    log4j = '1.2.17'
+    jackson = '2.9.0'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+}
+
+dependencies {
+    compile "org.slf4j:slf4j-log4j12:$rootProject.ext.slf4j"
+    compile "log4j:log4j:$rootProject.ext.log4j"
+    compile "org.apache.commons:commons-lang3:3.8.1"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$rootProject.ext.jackson"
+    compile "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jackson"
+}
+
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from configurations.runtime
+}
+
+build.dependsOn(copyToLib)
