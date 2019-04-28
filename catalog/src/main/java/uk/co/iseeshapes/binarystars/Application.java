@@ -135,12 +135,12 @@ public class Application {
 
         VariableStar variableStar;
         Iterator<VariableStar> variableStarIterator = variableStars.iterator();
-        message.append("\n\nStars removed for having 0 period:");
+        //message.append("\n\nStars removed for having 0 period:");
         while (variableStarIterator.hasNext()) {
             variableStar = variableStarIterator.next();
             if (variableStar.period == 0.0) {
                 variableStarIterator.remove();
-                message.append('\n').append(variableStar.names.get("GCVS"));
+                //message.append('\n').append(variableStar.names.get("GCVS"));
             }
         }
         log.error(message.toString());

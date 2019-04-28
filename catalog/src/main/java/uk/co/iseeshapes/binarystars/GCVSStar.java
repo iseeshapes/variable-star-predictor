@@ -12,10 +12,12 @@ class GCVSStar {
     private static final Logger log = LoggerFactory.getLogger(GCVSStar.class);
 
     private static final Pattern starNamePattern = Pattern.compile("^([A-Z]{1,2}|[a-z.]{1,3}\\s+\\d?|V\\d{4})*\\s+([A-Za-z]{3}).*$");
+    private static final Pattern magnitudePattern = Pattern.compile("^([\\s(<>])\\s*([-\\d.]+)[\\s:]*([\\s)]?)$");
+    private static final Pattern ignoreMagnitudePattern = Pattern.compile("^[\\s\\d().:'BRIJUVabcgpuvy*]*$");
     private static final Pattern raDecPattern = Pattern.compile("(\\d{2})(\\d{2})(\\d{2}\\.\\d*)\\s+([+-]\\d{2})(\\d{2})(\\d{2}\\.\\d*)\\s*");
-    private static Pattern spectralTypePattern = Pattern.compile("^([OBAFGKM][0-9]?[IVX]*[e]?).*$");
+    private static final Pattern spectralTypePattern = Pattern.compile("^([OBAFGKM][0-9]?[IVX]*[e]?).*$");
 
-    private static final double NoMagnitude = 100.0;
+    private static final double NoMagnitude = -100.0;
 
     @JsonProperty
     String name;
@@ -47,16 +49,21 @@ class GCVSStar {
     @JsonProperty
     String spectralType;
 
-    private static double decodeMagnitude (String raw) {
-        raw = raw.trim();
-        if (StringUtils.isEmpty(raw)) {
+    private static double decodeMagnitude (double baseMagnitude, String raw) {
+        double result;
+        Matcher matcher = magnitudePattern.matcher(raw);
+        if (!matcher.matches()) {
+            matcher = ignoreMagnitudePattern.matcher(raw);
+            if (!matcher.matches()) {
+                log.error("Cannot match magnitude \"{}\" to pattern \"{}\"", raw, magnitudePattern.pattern());
+            }
             return NoMagnitude;
         }
-        try {
-            return Double.parseDouble(raw);
-        } catch (NumberFormatException e) {
-            return NoMagnitude;
+        result = Double.parseDouble(matcher.group(2));
+        if ("(".equals(matcher.group(1))) {
+            result += baseMagnitude;
         }
+        return result;
     }
 
     private static double convertTimeToRadians (double hours, double minutes, double seconds) {
@@ -84,15 +91,17 @@ class GCVSStar {
             return null;
         }
 
-        max = decodeMagnitude(line.substring(53, 58));
+        max = decodeMagnitude(0.0, line.substring(52, 60));
         if (max == NoMagnitude) {
+            log.error("Star {} has no valid max magnitude raw = \"{}\"", starName, line.substring(52, 60));
             return null;
         }
 
-        min1 = decodeMagnitude(line.substring(64, 69));
-        min2 = decodeMagnitude(line.substring(77, 82));
-        min = min1 < min2 ? min1 : min2;
+        min1 = decodeMagnitude(max, line.substring(62, 74));
+        min2 = decodeMagnitude(max, line.substring(75, 87));
+        min = min1 > min2 ? min1 : min2;
         if (min == NoMagnitude) {
+            log.error("Star {} has no valid min magnitude raw = \"{}\" / \"{}\"", starName, line.substring(62, 74), line.substring(75, 87));
             return null;
         }
 
@@ -140,8 +149,8 @@ class GCVSStar {
         if (rawSpectralType.length() != 0) {
             matcher = spectralTypePattern.matcher(rawSpectralType);
             if (!matcher.matches()) {
-                log.error("For star {} cannot convert \"{}\" to pattern \"{}\"", starName, rawSpectralType,
-                        spectralTypePattern.pattern());
+                //log.error("For star {} cannot convert \"{}\" to pattern \"{}\"", starName, rawSpectralType,
+                //        spectralTypePattern.pattern());
                 rawSpectralType = "";
             }
         }

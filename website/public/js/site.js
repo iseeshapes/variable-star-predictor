@@ -127,6 +127,18 @@ function updateTable () {
     tableData.sort((lhs, rhs) => {
       return lhs.type.localeCompare(rhs.type);
     });
+  } else if ("magnitude".localeCompare(sort) == 0) {
+    tableData.sort ((lhs, rhs) => {
+      var lhsRange = lhs.maximumMagnitude - lhs.minimumMagnitude;
+      var rhsRange = rhs.maximumMagnitude - rhs.minimumMagnitude;
+      if (lhsRange < rhsRange) {
+        return -1;
+      }
+      if (lhsRange > rhsRange) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   var excludeNoStart = $("#excludeNoStart").is(":checked");
