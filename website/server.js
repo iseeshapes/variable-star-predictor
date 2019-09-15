@@ -103,16 +103,12 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
   } else if (request.params.searchType === "pulsating") {
       rawData = fs.readFileSync ('data/pulsatingVariableStarData.json');
   }
-  console.log("finished read");
   let binaryStars = JSON.parse(rawData);
-  console.log("converted to json");
 
   let results = [];
 
   let midEclipseTime, startEclipseTime, endEclipseTime;
   let midEclipse, startEclipse, endEclipse;
-
-  console.log("Number of stars: " + binaryStars.length);
 
   for (let i=0;i<binaryStars.length;i++) {
     if (binaryStars[i].minimumMagnitude > maximumMagnitude
@@ -171,7 +167,6 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
     });
   }
 
-  console.log("Finished");
   response.status(200).json(results);
 });
 
