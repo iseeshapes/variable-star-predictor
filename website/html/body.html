@@ -1,0 +1,73 @@
+<div class="body">
+  <div class="bodyHeading">Observation Site Details</div>
+  <table class="inputTable">
+    <tr>
+      <td class="inputLabel">Latitude (-90 -> 90):</td>
+      <td><input id="latitude" type="text" class="numberInput" tabindex="1" oninput="validateLatitude ()"></td>
+      <td class="inputLabel">Longitude (0 -> 359):</td>
+      <td><input id="longitude" type="text" class="numberInput" tabindex="2" oninput="validateLongitude ()"></td>
+    </tr>
+    <tr>
+      <td class="inputLabel">Faintest Magnitude:</td>
+      <td><input id="maximumMagnitude" type="text" class="numberInput" tabindex="3" oninput="validateMaximumMagnitude ()"></td>
+      <td class="inputLabel">Minimum Altitude (0 -> 90):</td>
+      <td><input id="miniumAltitude" type="text" class="numberInput" tabindex="4" oninput="validateMinimumAltitude ()"></td>
+    </tr>
+    <tr>
+      <td class="inputLabel">Start Hour (0-23):</td>
+      <td><input id="startHour" type="text" class="numberInput" tabindex="5" oninput="validateStarHour ()"></td>
+      <td class="inputLabel">End Hour (0-23):</td>
+      <td><input id="endHour" type="text" class="numberInput" tabindex="6" oninput="validateEndHour ()"></td>
+    </tr>
+    <tr>
+      <td colspan="4" class="buttonCell">
+        <button id="submit" class="button" type="button" tabindex="7" onclick="calculate ()">Search</button>
+      </td>
+    </tr>
+  </table>
+  <div class="bodyHeading">Visible Stars</div>
+  <table class="inputTable">
+    <tr>
+      <td class="inputLabel">Sort:</td>
+      <td>
+        <select id="sort" class="textInput" tabindex="8" onchange="updateTable()">
+          <option value="time" selected="true">Mid Eclipse Time</option>
+          <option value="name">GCVS Name</option>
+          <option value="type">GCVS Type</option>
+          <option value="magnitude">Magnitude Difference</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="inputLabel">Type includes text:</td>
+      <td><input id="variableType" class="textInput" type="text" tabindex="9" oninput="updateTable()"></td>
+    </tr>
+    <tr>
+      <td class="inputLabel">Exclude stars without start and ends times:</td>
+      <td><input id="excludeNoStart" type="checkbox" tabindex="10" onchange="updateTable()"></td>
+    </tr>
+  </table>
+  <table id="dataTable" class="data">
+      <tr class="heading">
+        <th class="data" colspan="2">GCVS</th>
+        <th class="data magnitude" rowspan="2">Brightest<br/>Magnitude</th>
+        <th class="data magnitude" rowspan="2">Faintest<br/>Magnitude</th>
+        <th class="data" colspan="2">Start Eclipse</th>
+        <th class="data" colspan="2">Mid Eclipse</th>
+        <th class="data" colspan="2">End Eclipse</th>
+        <th class="data spectralType" rowspan="2">Spectral Type</th>
+        <th class="data links" rowspan="2">Links</th>
+      </tr>
+      <tr class="heading">
+        <th class="data name">Name</th>
+        <th class="data type">Type</th>
+        <th class="data time">Time</th>
+        <th class="data altitude">Alt</th>
+        <th class="data time">Time</th>
+        <th class="data altitude">Alt</th>
+        <th class="data time">Time</th>
+        <th class="data altitude">Alt</th>
+      </tr>
+  </table>
+  <div id="summary"></div>
+</div>

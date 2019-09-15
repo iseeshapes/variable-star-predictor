@@ -1,0 +1,148 @@
+:root {
+  --body-width: 1050px;
+  --body-left: 30px;
+  --body-top: 10px;
+  --item-left: 20px;
+  --item-top: 20px;
+}
+
+body {
+  background-color: var(--background-colour);
+}
+
+#titleWrapper {
+  left: var(--body-left);
+  width: var(--body-width);
+  top: var(--body-top);
+  position: relative;
+  overflow: hidden;
+  background-color: var(--title-background-colour);
+}
+
+#titleText {
+  font-size: 36px;
+  color: var(--title-text-colour);
+  position: relative;
+  top: 82px;
+  left: var(--item-left);
+  float:left;
+}
+
+#titleImage {
+  height: 200px;
+  float: right;
+}
+
+div.body {
+  width: var(--body-width);
+  position: relative;;
+  left: var(--body-left);
+  top: var(--body-top);
+  background-color: var(--body-background_colour);
+  border: 2px solid var(--body-border-colour);
+  margin-bottom: 30px;
+}
+
+.bodyHeading {
+  position: relative;;
+  left: var(--item-left);
+  font-size: 24px;
+}
+
+.inputTable {
+  position: relative;;
+  left: var(--item-left);
+  /*top: var(--item-top);*/
+}
+
+.inputLabel {
+  font-size: 14;
+}
+
+.error {
+  background-color: #ff0000;
+}
+
+.numberInput {
+  width: 50px;
+  text-align: right;
+}
+
+.textInput {
+  width: 150px;
+}
+
+.buttonCell {
+  text-align: right;
+}
+
+.button {
+  font-size: 14px;
+  width: 100px;
+}
+
+table.data {
+  position: relative;
+  left: var(--item-left);
+  border-collapse: collapse;
+}
+
+th.name, th.type {
+  width: 120px;
+}
+
+th.name, th.type, th.magnitude, th.spectralType, th.links {
+  width: 100px;
+}
+
+th.time {
+  width: 75px;
+}
+
+th.altitude {
+  width: 40px;
+}
+
+th.data {
+  background-color: var(--table-header-background-colour);
+}
+
+tr.data:nth-child(even) {
+  background-color: var(--alternate-row-colour);
+}
+
+tr.data:hover {
+  background-color: var(--hover-row-colour);
+}
+
+tr.data, th.data, td.data, td.no-results {
+  border: 1px solid black;
+}
+
+td.no-results {
+  font-family: "Lucida Console", monospace;
+  font-size: 24px;
+  padding: 10px 10px 10px 10px;
+  text-align: center;
+}
+
+td.data {
+  font-family: "Lucida Console", monospace;
+  font-size: 15px;
+  padding: 2px 5px 2px 5px;
+}
+
+td.number {
+  text-align: right;
+}
+
+td.time, td.blank {
+  text-align: center;
+}
+
+#summary {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative;
+  left: var(--item-left);
+}

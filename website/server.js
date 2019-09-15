@@ -27,12 +27,6 @@ const julianDate = new JulianDate ();
 const Equatorial = require('./modules/equatorial');
 const equatorial = new Equatorial ();
 
-app.use(express.static('public'));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html/index.html'))
-})
-
 function toRadians(degrees) {
   return degrees * Math.PI / 180.0;
 }
@@ -42,11 +36,11 @@ function toDegrees(radians) {
 }
 
 function createTimeAndPosition (time, binaryStar, longitude, latitude) {
-  var hourAngle = equatorial.calculateHourAngleFromEquatorial(time, longitude,
+  let hourAngle = equatorial.calculateHourAngleFromEquatorial(time, longitude,
     binaryStar.rightAscension);
-  var altitude = equatorial.calculateAltitude (hourAngle, binaryStar.declination,
+  let altitude = equatorial.calculateAltitude (hourAngle, binaryStar.declination,
     latitude);
-  var azimuth = equatorial.calculateAzimuth (hourAngle, binaryStar.declination,
+  let azimuth = equatorial.calculateAzimuth (hourAngle, binaryStar.declination,
     latitude, altitude);
 
   return {
@@ -56,11 +50,16 @@ function createTimeAndPosition (time, binaryStar, longitude, latitude) {
   }
 }
 
-app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumAltitude/maximumMagnitude/:maximumMagnitude/startDate/:startDate/endDate/:endDate", (request, response) => {
-  if (request.params.longitude == null || request.params.longitude == undefined) {
-    response.status(500).json({ message : "No 'longitude' parameter defined in query string" });
-    return;
-  }
+app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumAltitude/maximumMagnitude/:maximumMagnitude/startDate/:startDate/endDate/:endDate", (request, response) => {
+    if (request.params.searchType == undefined || request.params.searchType == null) {
+      response.status(500).json({ message : "No 'searchType' parameter defined in query string" });
+      return;
+    }
+
+    if (request.params.longitude == null || request.params.longitude == undefined) {
+      response.status(500).json({ message : "No 'longitude' parameter defined in query string" });
+      return;
+    }
 
   if (request.params.latitude == null || request.params.latitude == undefined) {
     response.status(500).json({ message : "No 'latitude' parameter defined in query string" });
@@ -87,28 +86,42 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
     return;
   }
 
-  var longitude = toRadians(request.params.longitude);
-  var latitude = toRadians(request.params.latitude);
-  var miniumAltitude = request.params.miniumAltitude;
-  var maximumMagnitude = request.params.maximumMagnitude;
-  var startDate = new Date(request.params.startDate);
-  var endDate = new Date(request.params.endDate);
+  let longitude = toRadians(request.params.longitude);
+  let latitude = toRadians(request.params.latitude);
+  let miniumAltitude = request.params.miniumAltitude;
+  let maximumMagnitude = request.params.maximumMagnitude;
+  let startDate = new Date(request.params.startDate);
+  let endDate = new Date(request.params.endDate);
 
-  var startJulianDate = julianDate.getJulianDate(startDate);
-  var endJulianDate = julianDate.getJulianDate(endDate);
+  let startJulianDate = julianDate.getJulianDate(startDate);
+  let endJulianDate = julianDate.getJulianDate(endDate);
 
-  var rawData = fs.readFileSync ('data/binaryStarData.json');
-  var binaryStars = JSON.parse(rawData);
+  let rawData = undefined;
+  console.log("BinaryStarEclipsePredictor read");
+  if (request.params.searchType === "eclipsing") {
+      rawData = fs.readFileSync ('data/eclipsingVariableStarData.json');
+  } else if (request.params.searchType === "pulsating") {
+      rawData = fs.readFileSync ('data/pulsatingVariableStarData.json');
+  }
+  console.log("finished read");
+  let binaryStars = JSON.parse(rawData);
+  console.log("converted to json");
 
-  var results = [];
+  let results = [];
 
-  var midEclipseTime, startEclipseTime, endEclipseTime;
-  var midEclipse, startEclipse, endEclipse;
+  let midEclipseTime, startEclipseTime, endEclipseTime;
+  let midEclipse, startEclipse, endEclipse;
 
-  for (var i=0;i<binaryStars.length;i++) {
+  console.log("Number of stars: " + binaryStars.length);
+
+  for (let i=0;i<binaryStars.length;i++) {
     if (binaryStars[i].minimumMagnitude > maximumMagnitude
       || binaryStars[i].maximumMagnitude > maximumMagnitude) {
       continue;
+    }
+
+    if (binaryStars[i].period <= 0.0) {
+        continue;
     }
 
     midEclipseTime = binaryStars[i].epoch;
@@ -158,6 +171,7 @@ app.get("/search/longitude/:longitude/latitude/:latitude/miniumAltitude/:miniumA
     });
   }
 
+  console.log("Finished");
   response.status(200).json(results);
 });
 

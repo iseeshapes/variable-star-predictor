@@ -1,0 +1,14 @@
+  $(function () {
+    $("#longitude").val(getCookie("longitude"));
+    $("#latitude").val(getCookie("latitude"));
+    $("#miniumAltitude").val(getCookie("miniumAltitude"));
+    $("#maximumMagnitude").val(getCookie("maximumMagnitude"));
+    $("#startHour").val(getCookie("startHour"));
+    $("#endHour").val(getCookie("endHour"));
+
+    calculate();
+
+    updateTable ();
+  });
+
+</script>

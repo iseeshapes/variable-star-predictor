@@ -1,0 +1,10 @@
+:root {
+    --background-colour: #180500;
+    --title-background-colour: #090200;
+    --title-text-colour: #fffcfc;
+    --body-background_colour: #fffcfc;
+    --body-border-colour: #ffeacd;
+    --table-header-background-colour: #ffdfc5;
+    --alternate-row-colour: #fff8f2;
+    --hover-row-colour: #fff0f0;
+}
