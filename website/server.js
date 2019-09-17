@@ -129,7 +129,7 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
         fast = false;
     }
 
-    if (!fast && binaryStars[i].eclipseTime > 0) {
+    if (fast === false && binaryStars[i].eclipseTime > 0) {
       startEclipseTime = midEclipseTime - binaryStars[i].eclipseTime / 2;
       endEclipseTime = midEclipseTime + binaryStars[i].eclipseTime / 2;
 
@@ -170,7 +170,8 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
       startEclipse: startEclipse,
       midEclipse: midEclipse,
       endEclipse: endEclipse,
-      spectralType: binaryStars[i].spectralType
+      spectralType: binaryStars[i].spectralType,
+      fast: fast
     });
   }
 
