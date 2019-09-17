@@ -97,7 +97,6 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
   let endJulianDate = julianDate.getJulianDate(endDate);
 
   let rawData = undefined;
-  console.log("BinaryStarEclipsePredictor read");
   if (request.params.searchType === "eclipsing") {
       rawData = fs.readFileSync ('data/eclipsingVariableStarData.json');
   } else if (request.params.searchType === "pulsating") {

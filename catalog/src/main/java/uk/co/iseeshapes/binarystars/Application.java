@@ -143,6 +143,10 @@ public class Application {
                 variableStar.period = krakowStar.period;
             }
 
+            if (variableStar.period <= 0.0) {
+                continue;
+            }
+
             eclipsingVariableStars.add(variableStar);
         }
         if (log.isInfoEnabled()) {
@@ -157,7 +161,7 @@ public class Application {
 
         for(GCVSStar gcvsStar : gcvsStars) {
             matcher = pulsatingStarTypePattern.matcher(gcvsStar.type);
-            if (gcvsStar.period <= 0.0 || !matcher.matches()) {
+            if (gcvsStar.maximumMagnitude > 14.0 || gcvsStar.period <= 0.0 || !matcher.matches()) {
                 continue;
             }
             count++;
