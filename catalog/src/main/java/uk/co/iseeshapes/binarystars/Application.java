@@ -164,7 +164,7 @@ public class Application {
 
         for(GCVSStar gcvsStar : gcvsStars) {
             matcher = pulsatingStarTypePattern.matcher(gcvsStar.type);
-            if (gcvsStar.maximumMagnitude > 15.0 || !matcher.matches()) {
+            if (gcvsStar.maximumMagnitude > 14.0 || !matcher.matches()) {
                 continue;
             }
             if (gcvsStar.period <= 0.0) {
