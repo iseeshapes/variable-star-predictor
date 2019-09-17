@@ -163,6 +163,7 @@ function updateTable () {
     html += fillInEclipsePoint(tableData[i].startEclipse);
     html += fillInEclipsePoint(tableData[i].midEclipse);
     html += fillInEclipsePoint(tableData[i].endEclipse);
+    html += '<td class="data">' + (tableData[i].fast ? 'F' : 'S') + '</td>'
     html += '<td class="data">' + tableData[i].spectralType + '</td>';
     html += fillInSources (tableData[i].names);
     html += '</tr>';
@@ -172,7 +173,7 @@ function updateTable () {
 
   if (starCount === 0) {
     $("#dataTable > tbody:last-child")
-      .append('<tr class="data"><td colspan="12" class="no-results">No Stars</td></tr>');
+      .append('<tr class="data"><td colspan="13" class="no-results">No Stars</td></tr>');
     $("#summary").html("Try expanding search or loosening filters");
   } else if (starCount == tableData.length) {
     $("#summary").html(tableData.length + " stars found");

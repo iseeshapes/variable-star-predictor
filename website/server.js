@@ -108,6 +108,7 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
 
   let midEclipseTime, startEclipseTime, endEclipseTime;
   let midEclipse, startEclipse, endEclipse;
+  let fast;
 
   for (let i=0;i<binaryStars.length;i++) {
     if (binaryStars[i].minimumMagnitude > maximumMagnitude
@@ -117,14 +118,18 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
 
     if (binaryStars[i].period <= 0.0) {
         continue;
+    } else if (binaryStars[i].period <= 0.2) {
+        fast = true;
+        midEclipseTime = (endJulianDate + startJulianDate) / 2;
+    } else {
+        midEclipseTime = binaryStars[i].epoch;
+        while (midEclipseTime < startJulianDate) {
+            midEclipseTime += binaryStars[i].period;
+        }
+        fast = false;
     }
 
-    midEclipseTime = binaryStars[i].epoch;
-    while (midEclipseTime < startJulianDate) {
-      midEclipseTime += binaryStars[i].period;
-    }
-
-    if (binaryStars[i].eclipseTime > 0) {
+    if (!fast && binaryStars[i].eclipseTime > 0) {
       startEclipseTime = midEclipseTime - binaryStars[i].eclipseTime / 2;
       endEclipseTime = midEclipseTime + binaryStars[i].eclipseTime / 2;
 
@@ -132,12 +137,15 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
         continue;
       }
 
-      startEclipse = createTimeAndPosition(startEclipseTime, binaryStars[i], longitude, latitude);
       midEclipse = createTimeAndPosition(midEclipseTime, binaryStars[i], longitude, latitude);
+      if (midEclipse.altitude < miniumAltitude) {
+          continue;
+      }
+
+      startEclipse = createTimeAndPosition(startEclipseTime, binaryStars[i], longitude, latitude);
       endEclipse = createTimeAndPosition(endEclipseTime, binaryStars[i], longitude, latitude);
 
       if (startEclipse.altitude < miniumAltitude
-        || midEclipse.altitude < miniumAltitude
         || endEclipse.altitude < miniumAltitude) {
         continue;
       }
@@ -162,7 +170,7 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
       startEclipse: startEclipse,
       midEclipse: midEclipse,
       endEclipse: endEclipse,
-      spectralType: binaryStars[i].spectralType,
+      spectralType: binaryStars[i].spectralType
     });
   }
 

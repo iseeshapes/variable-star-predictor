@@ -146,7 +146,10 @@ public class Application {
             if (variableStar.period <= 0.0) {
                 continue;
             }
-
+            /*if (variableStar.period <= 0.1) {
+                log.info("GCVS: {}, period : {}", gcvsStar.name, gcvsStar.period);
+                continue;
+            }*/
             eclipsingVariableStars.add(variableStar);
         }
         if (log.isInfoEnabled()) {
@@ -161,9 +164,16 @@ public class Application {
 
         for(GCVSStar gcvsStar : gcvsStars) {
             matcher = pulsatingStarTypePattern.matcher(gcvsStar.type);
-            if (gcvsStar.maximumMagnitude > 14.0 || gcvsStar.period <= 0.0 || !matcher.matches()) {
+            if (gcvsStar.maximumMagnitude > 15.0 || !matcher.matches()) {
                 continue;
             }
+            if (gcvsStar.period <= 0.0) {
+                continue;
+            }
+            /*if (gcvsStar.period <= 0.1) {
+                log.info("GCVS: {}, period : {}", gcvsStar.name, gcvsStar.period);
+                continue;
+            }*/
             count++;
             pulsatingVariableStars.add(createVariableStar(gcvsStar));
         }
