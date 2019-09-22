@@ -40,6 +40,11 @@ function getPeriod (startHour, endHour) {
   return period;
 }
 
+function formatRawPeriod (period) {
+    period = Number(period);
+    return Math.round(period * 1000) / 1000;
+}
+
 function formatTime (date) {
   let hour = date.getHours();
   let minute = date.getMinutes();
@@ -158,13 +163,14 @@ function updateTable () {
     let html = '<tr class="data"><td class="data">' + tableData[i].names.GCVS + '</td>'
       + '<td class="data">' + tableData[i].type + '</td>'
       + '<td class="data number">' + tableData[i].maximumMagnitude.toFixed(2) + '</td>'
-      + '<td class="data number">' + tableData[i].minimumMagnitude.toFixed(2) + '</td>';
+      + '<td class="data number">' + tableData[i].minimumMagnitude.toFixed(2) + '</td>'
+      + '<td class="data">' + formatRawPeriod (tableData[i].period) + '</td>';
 
     html += fillInEclipsePoint(tableData[i].startEclipse);
     html += fillInEclipsePoint(tableData[i].midEclipse);
     html += fillInEclipsePoint(tableData[i].endEclipse);
     html += '<td class="data">' + (tableData[i].fast ? 'F' : 'S') + '</td>'
-    html += '<td class="data">' + tableData[i].spectralType + '</td>';
+    //html += '<td class="data">' + tableData[i].spectralType + '</td>';
     html += fillInSources (tableData[i].names);
     html += '</tr>';
     //console.log (html);
@@ -173,7 +179,7 @@ function updateTable () {
 
   if (starCount === 0) {
     $("#dataTable > tbody:last-child")
-      .append('<tr class="data"><td colspan="13" class="no-results">No Stars</td></tr>');
+      .append('<tr class="data"><td colspan="14" class="no-results">No Stars</td></tr>');
     $("#summary").html("Try expanding search or loosening filters");
   } else if (starCount == tableData.length) {
     $("#summary").html(tableData.length + " stars found");

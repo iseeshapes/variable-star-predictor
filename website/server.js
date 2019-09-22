@@ -118,7 +118,7 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
 
     if (binaryStars[i].period <= 0.0) {
         continue;
-    } else if (binaryStars[i].period <= 0.2) {
+    } else if (binaryStars[i].period <= 0.1) {
         fast = true;
         midEclipseTime = (endJulianDate + startJulianDate) / 2;
     } else {
@@ -170,8 +170,9 @@ app.get("/searchType/:searchType/longitude/:longitude/latitude/:latitude/miniumA
       startEclipse: startEclipse,
       midEclipse: midEclipse,
       endEclipse: endEclipse,
-      spectralType: binaryStars[i].spectralType,
-      fast: fast
+      //spectralType: binaryStars[i].spectralType,
+      fast: fast,
+      period: binaryStars[i].period
     });
   }
 

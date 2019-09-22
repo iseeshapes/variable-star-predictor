@@ -19,6 +19,8 @@ public class Application {
     private static final Pattern binaryStarTypePattern = Pattern.compile("^E([AWBP])?([+/:].*)?$");
     private static final Pattern pulsatingStarTypePattern = Pattern.compile("^(.*[+:/])?(ACYG|BCEPS?|BLBOO|CEPB?|CW(AB)|DCEPS?|DSCTC?|GDOR|L[BC]?|LPB|M|PVTEL|RPHS|RR(\\(B\\)|AB|C)?|RV[AB]?|SR[A-DS]?|SXPHE|ZZ[ABO]?)([+:/].*)?$");
 
+    private static final double fileEpoch = 2458485.0; // 12 noon 1/1/2019
+
     private List<VariableStar> eclipsingVariableStars;
     private List<VariableStar> pulsatingVariableStars;
 
@@ -146,6 +148,9 @@ public class Application {
             if (variableStar.period <= 0.0) {
                 continue;
             }
+            while (variableStar.epoch + variableStar.period < fileEpoch) {
+                variableStar.epoch += variableStar.period;
+            }
             /*if (variableStar.period <= 0.1) {
                 log.info("GCVS: {}, period : {}", gcvsStar.name, gcvsStar.period);
                 continue;
@@ -169,6 +174,9 @@ public class Application {
             }
             if (gcvsStar.period <= 0.0) {
                 continue;
+            }
+            while (gcvsStar.epoch + gcvsStar.period < fileEpoch) {
+                gcvsStar.epoch += gcvsStar.period;
             }
             /*if (gcvsStar.period <= 0.1) {
                 log.info("GCVS: {}, period : {}", gcvsStar.name, gcvsStar.period);
