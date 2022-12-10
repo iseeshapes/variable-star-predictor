@@ -4,7 +4,7 @@
   "description": "* Install NodeJS from https://nodejs.org/",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.17.3"
   },
   "devDependencies": {},
   "scripts": {
